@@ -2252,8 +2252,8 @@
     }
 
     .love-nav button {
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.72);
       border: 1px solid rgba(234, 236, 240, 0.5);
@@ -2649,7 +2649,8 @@
       }
       .hero.wrap { padding-left: 32px !important; padding-right: 32px !important; }
       #about { padding: 80px 32px 72px !important; }
-      #love { padding-bottom: 32px !important; }
+      #work { padding-top: 96px !important; }
+      #love { padding-top: 120px !important; padding-bottom: 32px !important; }
       #cta  {
         min-height: 118svh;
         display: flex;
@@ -2760,16 +2761,20 @@
       }
 
       .brand img {
-        height: 36px !important;
+        height: 44px !important;
         transition: height 680ms cubic-bezier(0.22, 1, 0.36, 1);
       }
 
       /* ---------- Hero ---------- */
       .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         padding-top: 56px !important;
         padding-bottom: 40px !important;
         text-align: center;
       }
+      .hero-title { order: 1; }
       .hero-title {
         font-size: clamp(32px, 9vw, 46px) !important;
         line-height: 1.08;
@@ -2779,6 +2784,7 @@
       }
       .hero-title .mask-text { white-space: nowrap; }
       .hero-sub {
+        order: 2;
         width: auto !important;
         max-width: 520px;
         margin-left: auto;
@@ -2786,6 +2792,7 @@
         padding: 0 4px;
       }
       .hero-cta {
+        order: 3;
         flex-direction: column;
         align-items: stretch;
         gap: 12px;
@@ -2799,10 +2806,15 @@
         justify-content: center;
       }
       .hero-stage {
+        order: 4;
         width: 100% !important;
         max-width: 100% !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
+        margin: 32px 0 0 !important;
+        aspect-ratio: 16 / 10;
+      }
+      .proof {
+        order: 5;
+        width: 100%;
       }
       .proof .logos {
         position: relative;
@@ -3098,7 +3110,7 @@
       .cta-title {
         font-size: clamp(36px, 11vw, 48px);
         width: 100%;
-        margin-top: max(32px, min(calc(48vw + 12px), 220px));
+        margin-top: max(72px, min(calc(48vw + 52px), 260px));
       }
       .cta-title .cta-brk {
         display: block;
@@ -3426,7 +3438,7 @@
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
           <div class="love-who">
-            <div class="av av-initials">DL</div>
+            <div class="av"><img src="assets/daphna.webp" alt="Daphna Langer" width="40" height="40" loading="lazy" decoding="async"></div>
             <div>
               <div class="name">Daphna Langer</div>
               <div class="role">CEO</div>
@@ -3438,7 +3450,7 @@
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
           <div class="love-who">
-            <div class="av av-initials">TG</div>
+            <div class="av"><img src="assets/tal.jpeg" alt="Tal Gershenman" width="40" height="40" loading="lazy" decoding="async"></div>
             <div>
               <div class="name">Tal Gershenman</div>
               <div class="role">Director of Product</div>
@@ -3450,7 +3462,7 @@
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
           <div class="love-who">
-            <div class="av av-initials">LA</div>
+            <div class="av"><img src="assets/lior.jpeg" alt="Lior Avisar" width="40" height="40" loading="lazy" decoding="async"></div>
             <div>
               <div class="name">Lior Avisar</div>
               <div class="role">Founder</div>
@@ -3462,7 +3474,7 @@
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
           <div class="love-who">
-            <div class="av av-initials">RR</div>
+            <div class="av"><img src="assets/raz.jpeg" alt="Raz Ronen" width="40" height="40" loading="lazy" decoding="async"></div>
             <div>
               <div class="name">Raz Ronen</div>
               <div class="role">CEO</div>
@@ -3474,7 +3486,7 @@
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
           <div class="love-who">
-            <div class="av av-initials">SA</div>
+            <div class="av"><img src="assets/sapir.jpeg" alt="Sapir Aran" width="40" height="40" loading="lazy" decoding="async"></div>
             <div>
               <div class="name">Sapir Aran</div>
               <div class="role">Co-founder</div>
@@ -3486,7 +3498,7 @@
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
           <div class="love-who">
-            <div class="av av-initials">IN</div>
+            <div class="av"><img src="assets/itay.jpeg" alt="Itay N." width="40" height="40" loading="lazy" decoding="async"></div>
             <div>
               <div class="name">Itay N.</div>
               <div class="role">CEO</div>
@@ -3498,7 +3510,7 @@
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
           <div class="love-who">
-            <div class="av av-initials">OY</div>
+            <div class="av"><img src="assets/omri_y.jpeg" alt="Omri Yeheskel" width="40" height="40" loading="lazy" decoding="async"></div>
             <div>
               <div class="name">Omri Yeheskel</div>
               <div class="role">Founder</div>

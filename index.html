@@ -62,10 +62,6 @@
       font-family: var(--font-body);
     }
 
-    body {
-      overflow-x: clip;
-    }
-
     a {
       color: inherit;
       text-decoration: none;
@@ -395,10 +391,6 @@
       z-index: 3;
     }
 
-    nav ul.links {
-      margin: 0;
-    }
-
     nav.topnav.compact {
       padding-top: 14px;
     }
@@ -455,34 +447,6 @@
       font-family: var(--font-sans);
       font-weight: 700;
       letter-spacing: -0.02em;
-    }
-
-    .brand-mark {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: var(--grad);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      box-shadow: 0 6px 16px -6px rgba(195, 43, 90, 0.5);
-    }
-
-    .brand-mark svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    .brand-name {
-      font-size: 18px;
-    }
-
-    .brand-name em {
-      font-family: var(--font-serif);
-      font-style: italic;
-      font-weight: 400;
-      letter-spacing: -0.01em;
     }
 
     nav ul.links {
@@ -954,23 +918,6 @@
       color: var(--ink);
     }
 
-    .section-kicker {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--ink-45);
-      margin-bottom: 20px;
-    }
-
-    .section-sub {
-      font-size: 18px;
-      color: var(--ink-60);
-      max-width: 520px;
-      margin: 0 auto;
-      line-height: 1.55;
-    }
-
     /* ─── VALUE CARDS ────────────────────────────────────── */
     .value-grid {
       display: grid;
@@ -1104,9 +1051,14 @@
 
     /* ─── SERVICES: PREMIUM SCROLL ENTRANCE ────────────── */
     /* Headlines — hero-matched character wave reveal */
-    #services.is-revealed .char {
+    #services.is-revealed .section-title .char {
       animation: char-wave 1400ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
       animation-delay: calc(var(--char-index) * 35ms);
+    }
+
+    #services.is-revealed .v-title .char {
+      animation: char-wave 1400ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      animation-delay: calc(520ms + (var(--char-index) * 35ms));
     }
 
     /* Cards — wave entrance: deepest → mid → shallowest */
@@ -1361,7 +1313,13 @@
 
     /* ─── WORK: PREMIUM SCROLL ENTRANCE ─────────────── */
     /* Headline — hero-matched character wave */
-    #work.is-revealed .char {
+    #work.is-revealed .section-title .char {
+      animation: char-wave 1400ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      animation-delay: calc(var(--char-index) * 35ms);
+    }
+
+    #work .tile:hover .overlay h4 .char,
+    #work .tile:focus-within .overlay h4 .char {
       animation: char-wave 1400ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
       animation-delay: calc(var(--char-index) * 35ms);
     }
@@ -1568,11 +1526,6 @@
       grid-row: span 2;
     }
 
-    .tile.t-tall {
-      grid-column: span 2;
-      grid-row: span 3;
-    }
-
     .tile.t-lg {
       grid-column: span 4;
       grid-row: span 2;
@@ -1640,10 +1593,6 @@
       height: 6px;
       border-radius: 3px;
       background: rgba(11, 11, 15, 0.14);
-    }
-
-    .mock-chip.g {
-      background: var(--grad);
     }
 
     .mock-dot {
@@ -2109,6 +2058,7 @@
       transform: scale(0.9);
       transition: opacity 1400ms cubic-bezier(0.22, 1, 0.36, 1),
         transform 1400ms cubic-bezier(0.22, 1, 0.36, 1);
+      transition-delay: 380ms;
     }
 
     #cta.is-revealed .cta-visual {
@@ -2119,7 +2069,7 @@
     /* Headline — character wave */
     #cta.is-revealed .char {
       animation: char-wave 1400ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
-      animation-delay: calc(300ms + (var(--char-index) * 35ms));
+      animation-delay: calc(var(--char-index) * 35ms);
     }
 
     /* Subtitle — fade + rise */
@@ -2153,7 +2103,7 @@
 
     /* ─── LOVE LETTERS: PREMIUM SCROLL ENTRANCE ───────── */
     /* Headline — character wave */
-    #love.is-revealed .char {
+    #love.is-revealed .love-title .char {
       animation: char-wave 1400ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
       animation-delay: calc(var(--char-index) * 35ms);
     }
@@ -2165,7 +2115,7 @@
 
     /* The carousel clones cards for infinite looping; nth-child hits offscreen
        clones. Tag the initial 3 visible cards with data-fan on reveal so the
-       animation fires once and doesn't retrigger on carousel navigation. */
+       animation fires once, then JS removes the tag after animationend. */
 
     @keyframes love-fan-left {
       from {
@@ -2174,9 +2124,9 @@
         transform: translateX(-180px) translateY(60px) rotate(-28deg) scale(0.88);
       }
       to {
-        opacity: 1;
-        filter: blur(0);
-        transform: translateX(0) translateY(0) rotate(-0.8deg) scale(0.96);
+        opacity: 0.4;
+        filter: blur(1.5px);
+        transform: translateX(0) var(--love-side-transform, scale(0.96));
       }
     }
 
@@ -2200,9 +2150,9 @@
         transform: translateX(180px) translateY(60px) rotate(28deg) scale(0.88);
       }
       to {
-        opacity: 1;
-        filter: blur(0);
-        transform: translateX(0) translateY(0) rotate(-0.8deg) scale(0.96);
+        opacity: 0.4;
+        filter: blur(1.5px);
+        transform: translateX(0) var(--love-side-transform, scale(0.96));
       }
     }
 
@@ -2221,8 +2171,6 @@
 
     /* Card inner content — staggered fade + rise */
     #love .love-who,
-    #love .love-headline,
-    #love .love-body,
     #love .love-brand {
       opacity: 0;
       transform: translateY(14px);
@@ -2234,12 +2182,18 @@
       transition-delay: 900ms;
     }
 
+    #love .love-body,
     #love .love-headline {
-      transition-delay: 1050ms;
+      opacity: 1;
+      transform: none;
+      transition: none;
+      animation: none;
     }
 
-    #love .love-body {
-      transition-delay: 1150ms;
+    #love .love-headline .char {
+      opacity: 1;
+      transform: none;
+      animation: none;
     }
 
     #love .love-brand {
@@ -2247,8 +2201,6 @@
     }
 
     #love.is-revealed .love-who,
-    #love.is-revealed .love-headline,
-    #love.is-revealed .love-body,
     #love.is-revealed .love-brand {
       opacity: 1;
       transform: translateY(0);
@@ -2353,6 +2305,14 @@
       gap: 24px;
       transition: transform .7s cubic-bezier(.2, .7, .2, 1);
       will-change: transform;
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .love-track.is-dragging {
+      cursor: grabbing;
     }
 
     .love-card {
@@ -2435,11 +2395,13 @@
     }
 
     .love-card:nth-child(odd) {
-      transform: scale(0.96) rotate(-0.8deg);
+      --love-side-transform: scale(0.96) rotate(-0.8deg);
+      transform: var(--love-side-transform);
     }
 
     .love-card:nth-child(even) {
-      transform: scale(0.96) rotate(0.6deg) translateY(8px);
+      --love-side-transform: scale(0.96) rotate(0.6deg) translateY(8px);
+      transform: var(--love-side-transform);
     }
 
     .love-card.active {
@@ -2635,6 +2597,11 @@
     /* shared mask-text wrappers for char-split reveals */
     .mask-wrap { display: inline-block; vertical-align: top; }
     .mask-text { display: inline-block; will-change: transform; }
+    .v-title .mask-wrap,
+    .tile .overlay h4 .mask-wrap,
+    .love-headline .mask-wrap {
+      display: inline;
+    }
 
     @media (max-width:900px) {
       .value-grid {
@@ -2654,7 +2621,6 @@
       .tile.t-wide,
       .tile.t-sq,
       .tile.t-mid,
-      .tile.t-tall,
       .tile.t-lg {
         grid-column: span 2;
         grid-row: span 2;
@@ -2684,49 +2650,110 @@
       .hero.wrap { padding-left: 32px !important; padding-right: 32px !important; }
       #about { padding: 80px 32px 72px !important; }
       #love { padding-bottom: 32px !important; }
-      #cta  { padding-top: 32px !important; padding-bottom: 96px !important; }
+      #cta  {
+        min-height: 118svh;
+        display: flex;
+        align-items: center;
+        padding-top: 32px !important;
+        padding-bottom: max(60px, calc(34svh - 120px)) !important;
+      }
 
       .section-head { margin-bottom: 40px; }
       .section-title { font-size: clamp(34px, 10vw, 44px); }
 
+      .sys-reveal-trigger {
+        opacity: 0;
+        transform: translateY(18px);
+        transition:
+          opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+          transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .sys-reveal-trigger.is-revealed {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .sys-reveal-trigger > .section-head,
+      #services .value-grid,
+      #about .about-grid > div:first-child,
+      #work .bento,
+      #love .love-title-row,
+      #love .love-track-wrap,
+      #love .love-nav,
+      #cta .cta-box {
+        opacity: 0;
+        transform: translateY(18px);
+        transition:
+          opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+          transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .sys-reveal-trigger.is-revealed > .section-head,
+      #services.is-revealed .value-grid,
+      #about.is-revealed .about-grid > div:first-child,
+      #work.is-revealed .bento,
+      #love.is-revealed .love-title-row,
+      #love.is-revealed .love-track-wrap,
+      #love.is-revealed .love-nav,
+      #cta.is-revealed .cta-box {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
       /* ---------- Nav ---------- */
       nav.topnav {
         padding: 16px 12px;
+        transition: padding 620ms cubic-bezier(0.22, 1, 0.36, 1);
       }
       .nav-inner {
         gap: 0;
         padding: 10px 12px 10px 16px;
-        justify-content: center;
+        justify-content: flex-start;
+        overflow: visible;
+        transition:
+          padding 620ms cubic-bezier(0.22, 1, 0.36, 1),
+          border-radius 620ms cubic-bezier(0.22, 1, 0.36, 1),
+          box-shadow 520ms ease;
       }
       nav.topnav.compact .nav-inner {
         width: 100% !important;
         max-width: 100% !important;
         padding: 8px 8px 8px 16px;
-        justify-content: space-between;
+        justify-content: flex-start;
         gap: 8px;
       }
       nav ul.links { display: none; }
       .nav-grow { display: none; }
+      .brand {
+        transform: translateX(calc(50vw - 48px));
+        transition: transform 680ms cubic-bezier(0.22, 1, 0.36, 1);
+        will-change: transform;
+      }
+      nav.topnav.compact .brand {
+        transform: translateX(0);
+      }
 
       .nav-right {
         display: flex;
         opacity: 0;
         pointer-events: none;
         max-width: 0;
-        margin: 0;
-        transform: none;
+        margin: 0 0 0 auto;
+        transform: translateX(14px) scale(0.96);
         overflow: hidden;
+        transition:
+          opacity 520ms cubic-bezier(0.22, 1, 0.36, 1),
+          transform 620ms cubic-bezier(0.22, 1, 0.36, 1),
+          max-width 620ms cubic-bezier(0.22, 1, 0.36, 1);
         /* delay overflow clip removal so shadow isn't cropped when compact */
       }
-      .topnav.compact .nav-right,
-      .topnav.is-compact .nav-right {
+      nav.topnav.compact .nav-right {
         opacity: 1;
         pointer-events: auto;
-        max-width: none;
+        max-width: 168px;
+        margin-left: auto;
+        transform: translateX(0) scale(1);
         overflow: visible;
       }
-      .topnav.compact .nav-right .btn,
-      .topnav.is-compact .nav-right .btn {
+      .topnav.compact .nav-right .btn {
         height: 40px;
         padding: 0 16px;
         font-size: 13px;
@@ -2734,6 +2761,7 @@
 
       .brand img {
         height: 36px !important;
+        transition: height 680ms cubic-bezier(0.22, 1, 0.36, 1);
       }
 
       /* ---------- Hero ---------- */
@@ -2837,6 +2865,17 @@
         margin: 0 !important;
         grid-template-columns: none !important;
         text-align: center;
+        opacity: 0;
+        transform: translateY(40px);
+        transition:
+          opacity 1400ms cubic-bezier(0.22, 1, 0.36, 1),
+          transform 1400ms cubic-bezier(0.22, 1, 0.36, 1);
+        will-change: opacity, transform;
+      }
+
+      #about.about-mobile-revealed .about-grid {
+        opacity: 1;
+        transform: translateY(0);
       }
 
       /* Text column — full width minus section padding, centered */
@@ -2917,6 +2956,9 @@
         word-break: normal;
         overflow-wrap: normal;
       }
+      #about.is-revealed .about-title .char {
+        animation-delay: calc(620ms + (var(--char-index) * 35ms));
+      }
       #about .about-body {
         width: 100%;
         font-size: 16px;
@@ -2933,16 +2975,19 @@
         display: block;
         width: 100%;
         margin-top: -8px;
-        font-size: clamp(40px, 13vw, 64px) !important;
+        font-size: clamp(28px, 9.1vw, 45px) !important;
         letter-spacing: -2px !important;
         text-align: center;
       }
-      #about .about-sig .mask-wrap { display: none !important; }
+      #about .about-sig .mask-wrap { display: inline-block !important; }
       #about .about-sig-img {
-        display: inline-block;
+        display: none;
         height: auto;
         width: 32vw;
         max-width: 100%;
+      }
+      #about.is-revealed .about-sig .char {
+        animation-delay: calc(1400ms + (var(--char-index) * 40ms));
       }
 
       /* ---------- Work (bento) — single column ---------- */
@@ -2959,7 +3004,6 @@
       .bento .tile.t-wide,
       .bento .tile.t-sq,
       .bento .tile.t-mid,
-      .bento .tile.t-tall,
       .bento .tile.t-lg {
         aspect-ratio: 4 / 3;
       }
@@ -2977,6 +3021,9 @@
       #work.is-revealed .bento .tile.fade-el {
         opacity: 1;
         transform: translateY(0) scale(1);
+      }
+      #work.is-revealed .section-title .char {
+        animation-delay: calc(260ms + (var(--char-index) * 35ms));
       }
       #work.is-revealed .bento .tile.fade-el:nth-child(1) { transition-delay: 400ms; }
       #work.is-revealed .bento .tile.fade-el:nth-child(2) { transition-delay: 520ms; }
@@ -3012,16 +3059,46 @@
 
       /* ---------- CTA ---------- */
       .cta-box {
-        padding: 56px 16px;
+        width: 100%;
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        isolation: isolate;
+        overflow: visible;
+        padding: 84px 16px 120px;
       }
       .cta-visual {
+        position: absolute;
+        left: calc(50% - 52vw);
+        top: max(6px, calc(2svh + 16px));
+        z-index: -1;
+        width: 104vw !important;
+        max-width: none;
+        height: min(65vw, 312px) !important;
+        aspect-ratio: auto;
+        margin: 0;
+        pointer-events: none;
+        -webkit-mask-image: radial-gradient(ellipse 58% 58% at 50% 50%, black 26%, rgba(0, 0, 0, 0.72) 58%, rgba(0, 0, 0, 0.16) 86%, transparent 100%);
+        mask-image: radial-gradient(ellipse 58% 58% at 50% 50%, black 26%, rgba(0, 0, 0, 0.72) 58%, rgba(0, 0, 0, 0.16) 86%, transparent 100%);
+      }
+      .cta-visual video {
         width: 100% !important;
-        height: auto !important;
-        aspect-ratio: 16 / 10;
-        margin-bottom: 8px;
+        height: 100% !important;
+        object-fit: cover !important;
+        border-radius: 0 !important;
+      }
+      #cta .cta-title,
+      #cta .cta-sub,
+      #cta .btn {
+        position: relative;
+        z-index: 1;
       }
       .cta-title {
         font-size: clamp(36px, 11vw, 48px);
+        width: 100%;
+        margin-top: max(32px, min(calc(48vw + 12px), 220px));
       }
       .cta-title .cta-brk {
         display: block;
@@ -3035,6 +3112,7 @@
       .cta-box .btn-lg {
         width: 100%;
         max-width: 360px;
+        align-self: center;
       }
 
       /* ---------- Tame heavy scroll-linked motion on mobile ---------- */
@@ -3174,7 +3252,7 @@
         <div class="about-sig" style="letter-spacing:-3.2px"><span class="mask-wrap"><span class="mask-text">Sagi Hatan</span></span><img class="about-sig-img" src="assets/signature_mobile.svg" alt="Sagi Hatan"></div>
       </div>
       <div class="about-portrait">
-        <img src="assets/profile.png" alt="Sagi Hatan" />
+        <img src="assets/profile.png" alt="Sagi Hatan" width="976" height="565" loading="lazy" decoding="async" />
       </div>
     </div>
   </section>
@@ -3448,7 +3526,7 @@
   <section id="cta" class="wrap sys-reveal-trigger">
     <div class="cta-box">
       <div class="cta-visual">
-        <video src="assets/cta.mp4" muted playsinline loop data-card-video
+        <video src="assets/cta.mp4" muted playsinline loop preload="metadata" data-card-video
           style="width:100%;height:100%;object-fit:contain;border-radius:16px;"></video>
       </div>
       <h2 class="cta-title"><span class="mask-wrap"><span class="mask-text">Ready <em>when</em></span></span><span class="cta-brk"></span> <span
@@ -3496,10 +3574,11 @@
       mono: "linear-gradient(140deg, #444 16.04%, #222 50.78%, #000 84.49%)",
       sun: "linear-gradient(140deg, #f5a524 16.04%, #e0467e 50.78%, #b02cb8 84.49%)"
     };
+    const root = document.documentElement;
 
     function applyTweaks() {
-      document.documentElement.style.setProperty('--grad', HUE_GRADIENTS[TWEAKS.accentHue] || HUE_GRADIENTS.warm);
-      document.documentElement.style.setProperty('--bg', TWEAKS.bg);
+      root.style.setProperty('--grad', HUE_GRADIENTS[TWEAKS.accentHue] || HUE_GRADIENTS.warm);
+      root.style.setProperty('--bg', TWEAKS.bg);
       // swatch selection
       document.querySelectorAll('#hueSwatches .tw-swatch').forEach(s => s.classList.toggle('sel', s.dataset.hue === TWEAKS.accentHue));
       document.querySelectorAll('#bgSwatches .tw-swatch').forEach(s => s.classList.toggle('sel', s.dataset.bg === TWEAKS.bg));
@@ -3615,6 +3694,14 @@
         return Math.max(1, Math.round(trackWidth / w));
       }
 
+      function swipeThreshold() {
+        const singleCardView = visibleCount() === 1;
+        const coarsePointer = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+        const ratio = singleCardView || coarsePointer ? 0.1 : 0.22;
+        const cap = singleCardView || coarsePointer ? 44 : 80;
+        return Math.max(22, Math.min(cap, stepWidth() * ratio));
+      }
+
       function applyStarsAndActive() {
         const vc = visibleCount();
         const centerOffset = vc >= 3 ? 1 : 0;
@@ -3650,6 +3737,12 @@
         if (e.propertyName === 'transform') snapIfNeeded();
       });
 
+      track.addEventListener('animationend', (e) => {
+        if (e.animationName && e.animationName.indexOf('love-fan-') === 0) {
+          e.target.removeAttribute('data-fan');
+        }
+      });
+
       function go(dir) {
         if (animating) return;
         animating = true;
@@ -3676,6 +3769,7 @@
           locked = false;
           pointerId = e.pointerId;
           try { track.setPointerCapture(pointerId); } catch (_) {}
+          track.classList.add('is-dragging');
           track.style.transition = 'none';
         }
         function onMove(e) {
@@ -3690,6 +3784,7 @@
               } else {
                 locked = 'y';
                 dragging = false;
+                track.classList.remove('is-dragging');
                 track.style.transition = 'transform .7s cubic-bezier(.2, .7, .2, 1)';
                 track.style.transform = `translateX(${-loveIdx * stepWidth()}px)`;
                 return;
@@ -3706,8 +3801,9 @@
         function onUp() {
           if (!dragging) return;
           dragging = false;
+          track.classList.remove('is-dragging');
           try { track.releasePointerCapture(pointerId); } catch (_) {}
-          const threshold = Math.min(80, stepWidth() * 0.22);
+          const threshold = swipeThreshold();
           if (locked === 'x' && Math.abs(dx) > threshold) {
             const dir = dx < 0 ? +1 : -1;
             animating = true;
@@ -3744,8 +3840,8 @@
         setTranslate(false);
         applyStarsAndActive();
         // Tag the 3 initially-visible cards so the fan entrance animation
-        // targets them (not offscreen clones). Runs once — animation holds
-        // via fill-mode: both, carousel navigation won't retrigger it.
+        // targets them (not offscreen clones). Runs once, then the
+        // animationend cleanup hands control back to normal carousel styles.
         const vc = visibleCount();
         const centerIdx = loveIdx + (vc >= 3 ? 1 : 0);
         const cCenter = track.children[centerIdx];
@@ -3785,16 +3881,44 @@
     // CINEMATIC REVEAL on scroll
     (function () {
       const triggers = document.querySelectorAll('.sys-reveal-trigger');
+      const mobileReveal = window.matchMedia && window.matchMedia('(max-width: 720px)').matches;
+      function revealDelayFor(id) {
+        if (mobileReveal) {
+          if (id === 'about') return 180;
+          if (id === 'work') return 420;
+          return 80;
+        }
+        return id === 'about' ? 600 : 340;
+      }
       const io = new IntersectionObserver((entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
             io.unobserve(entry.target);
-            const delay = entry.target.id === 'about' ? 600 : 340;
+            const delay = revealDelayFor(entry.target.id);
             setTimeout(() => entry.target.classList.add('is-revealed'), delay);
           }
         }
-      }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
+      }, {
+        threshold: 0,
+        rootMargin: mobileReveal ? '0px 0px -12% 0px' : '0px 0px -10% 0px'
+      });
       triggers.forEach(el => io.observe(el));
+
+      if (mobileReveal) {
+        const about = document.getElementById('about');
+        const aboutGrid = about && about.querySelector('.about-grid');
+        if (about && aboutGrid) {
+          const aboutIo = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                aboutIo.unobserve(entry.target);
+                setTimeout(() => about.classList.add('about-mobile-revealed'), 220);
+              }
+            }
+          }, { threshold: 0, rootMargin: '0px 0px -18% 0px' });
+          aboutIo.observe(aboutGrid);
+        }
+      }
 
       // iOS safety net: after 6s, only force-reveal sections already at/above
       // the current viewport — never preempt sections still below the fold.
@@ -3861,9 +3985,11 @@
       // Each section gets its own independent character index sequence
       splitChars('.hero-title .mask-text');
       splitChars('#services .section-title .mask-text');
+      splitChars('#services .v-title');
       splitChars('#about .about-title .mask-text');
       splitChars('#about .about-sig .mask-text');
       splitChars('#work .section-title .mask-text');
+      splitChars('#work .tile .overlay h4');
       splitChars('#love .love-title .mask-text');
       splitChars('#cta .cta-title .mask-text');
 
@@ -3968,7 +4094,7 @@
         inView = entries.some(e => e.isIntersecting);
         if (inView && rafId == null) rafId = requestAnimationFrame(tick);
       }, { rootMargin: '120px 0px' });
-      io.observe(document.getElementById('work'));
+      io.observe(work);
 
       window.addEventListener('scroll', onScroll, { passive: true });
     })();

@@ -61,9 +61,11 @@
     section {
       scroll-margin-top: 36px;
     }
+
     #about {
       scroll-margin-top: 52px;
     }
+
     #cta {
       scroll-margin-top: -80px;
     }
@@ -122,8 +124,13 @@
     }
 
     @keyframes logos-scroll {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
     }
 
     @keyframes char-wave {
@@ -146,6 +153,30 @@
 
       100% {
         opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes tag-drop {
+      0% {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      100% {
+        opacity: 0.85;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes work-sub-rise {
+      0% {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      100% {
+        opacity: 0.88;
         transform: translateY(0);
       }
     }
@@ -807,8 +838,13 @@
     }
 
     /* Dupes hidden by default (desktop shows original set only) */
-    .proof-logo.dup { display: none; }
-    .logos-track { display: contents; }
+    .proof-logo.dup {
+      display: none;
+    }
+
+    .logos-track {
+      display: contents;
+    }
 
     /* hero device / screen */
     .hero-stage {
@@ -1036,7 +1072,7 @@
 
     .v-tag {
       font-family: var(--font-sans);
-      font-weight: 500;
+      font-weight: 600;
       font-size: 12px;
       letter-spacing: -0.01em;
       color: rgb(112, 112, 112);
@@ -1271,7 +1307,9 @@
     }
 
     /* SVG fallback — hidden on desktop, shown on mobile */
-    .about-sig-img { display: none; }
+    .about-sig-img {
+      display: none;
+    }
 
     .about-portrait {
       position: absolute;
@@ -1341,7 +1379,7 @@
     #work .tile:hover .overlay h4 .char,
     #work .tile:focus-within .overlay h4 .char {
       animation: char-wave 1400ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
-      animation-delay: calc(var(--char-index) * 35ms);
+      animation-delay: 0ms;
     }
 
     /* Tiles — staggered wave entrance */
@@ -1418,6 +1456,27 @@
     }
 
     /* ─── WORK (bento) ───────────────────────────────────── */
+    /*
+      Work image update map, numbered left to right:
+      01 Midori Music      -> assets/work/project-01.webp
+      02 Fast Logistics    -> assets/work/project-02.webp
+      03 Halcyon CRM       -> assets/work/project-03.webp
+      04 Aurora Studio     -> assets/work/project-04.webp
+      05 Ledger Cash       -> assets/work/project-05.webp
+      06 Wallet card       -> assets/work/project-06.webp
+
+      To update a project picture later, replace the matching file above.
+      Use .webp for best weight/quality, or update the URL below if using .jpg/.png.
+    */
+    :root {
+      --work-image-01: url("assets/work/project-01.webp");
+      --work-image-02: url("assets/work/project-02.webp");
+      --work-image-03: url("assets/work/project-03.webp");
+      --work-image-04: url("assets/work/project-04.webp");
+      --work-image-05: url("assets/work/project-05.webp");
+      --work-image-06: url("assets/work/project-06.webp");
+    }
+
     .bento {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
@@ -1465,7 +1524,24 @@
     .tile .art {
       position: absolute;
       inset: 0;
+      z-index: 0;
       transition: transform .8s cubic-bezier(.2, .7, .2, 1), filter .5s;
+    }
+
+    .tile .art::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    .tile .art>* {
+      position: relative;
+      z-index: 1;
     }
 
     .tile:hover .art {
@@ -1484,35 +1560,172 @@
       background: linear-gradient(180deg, rgba(11, 11, 15, 0) 35%, rgba(11, 11, 15, 0.55) 100%);
       opacity: 0;
       transition: opacity .5s;
+      z-index: 2;
     }
 
     .tile:hover .overlay {
       opacity: 1;
     }
 
-    .tile .overlay .kicker {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      opacity: .85;
-      margin-bottom: 6px;
+    .project-content {
+      width: min(100%, 420px);
+      opacity: 0;
+      transform: translateY(40px);
+      transition:
+        opacity 360ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform;
     }
 
-    .tile .overlay h4 {
+    .tile:hover .project-content,
+    .tile:focus-within .project-content {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .project-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .project-icon {
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--ink);
+      box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.14),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+      font-family: var(--font-sans);
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+
+    .project-icon.accent-teal {
+      color: #00B894;
+    }
+
+    .project-icon.accent-plum {
+      color: #B52752;
+    }
+
+    .project-icon.accent-violet {
+      color: #671186;
+    }
+
+    .project-icon.accent-amber {
+      color: #D4532E;
+    }
+
+    .project-copy {
+      min-width: 0;
+    }
+
+    .tile .overlay .project-name {
       font-family: var(--font-sans);
       font-weight: 700;
-      font-size: 24px;
-      letter-spacing: -0.02em;
+      font-size: 20px;
+      line-height: 1.12;
+      letter-spacing: 0;
       margin: 0 0 4px;
+      color: #fff;
     }
 
-    .tile .overlay p {
-      font-size: 14px;
-      line-height: 1.5;
+    .tile .overlay .project-subtext {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.35;
+      letter-spacing: 0;
       margin: 0;
-      opacity: .88;
-      max-width: 32ch;
+      color: rgba(255, 255, 255, 0.76);
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .project-tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 14px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      background: linear-gradient(135deg,
+          rgba(255, 255, 255, 0.22),
+          rgba(255, 255, 255, 0.06));
+      color: rgba(255, 255, 255, 0.78);
+      -webkit-backdrop-filter: blur(18px) saturate(150%);
+      backdrop-filter: blur(18px) saturate(150%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.42),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+        0 6px 18px rgba(0, 0, 0, 0.22);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .project-icon,
+    .project-name,
+    .project-subtext,
+    .project-tags {
+      opacity: 0;
+      transform: translateY(14px);
+      transition:
+        opacity 340ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 340ms cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform;
+    }
+
+    .tile:hover .project-icon,
+    .tile:focus-within .project-icon {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 40ms;
+    }
+
+    .tile:hover .project-name,
+    .tile:focus-within .project-name {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 90ms;
+      animation: none;
+    }
+
+    #work .tile:hover .overlay .project-name .char,
+    #work .tile:focus-within .overlay .project-name .char {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+
+    .tile:hover .project-subtext,
+    .tile:focus-within .project-subtext {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 140ms;
+    }
+
+    .tile:hover .project-tags,
+    .tile:focus-within .project-tags {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 190ms;
     }
 
     .tile .glow {
@@ -1551,7 +1764,7 @@
       grid-row: span 2;
     }
 
-    /* placeholder art styles */
+    /* gradient fallbacks */
     .art-1 {
       background:
         radial-gradient(80% 50% at 20% 30%, rgba(220, 96, 52, 0.18), transparent 60%),
@@ -1581,6 +1794,31 @@
 
     .art-6 {
       background: linear-gradient(140deg, #fff, #f3eef0);
+    }
+
+    /* replaceable project screenshots */
+    .art-1>.art::after {
+      background-image: var(--work-image-01);
+    }
+
+    .art-2>.art::after {
+      background-image: var(--work-image-02);
+    }
+
+    .art-4>.art::after {
+      background-image: var(--work-image-03);
+    }
+
+    .art-5>.art::after {
+      background-image: var(--work-image-04);
+    }
+
+    .art-3>.art::after {
+      background-image: var(--work-image-05);
+    }
+
+    .art-6>.art::after {
+      background-image: var(--work-image-06);
     }
 
     .mock {
@@ -2141,6 +2379,7 @@
         filter: blur(12px);
         transform: translateX(-180px) translateY(60px) rotate(-28deg) scale(0.88);
       }
+
       to {
         opacity: 0.4;
         filter: blur(1.5px);
@@ -2154,6 +2393,7 @@
         filter: blur(6px);
         transform: translateY(56px) rotate(0deg) scale(0.95);
       }
+
       to {
         opacity: 1;
         filter: blur(0);
@@ -2167,6 +2407,7 @@
         filter: blur(12px);
         transform: translateX(180px) translateY(60px) rotate(28deg) scale(0.88);
       }
+
       to {
         opacity: 0.4;
         filter: blur(1.5px);
@@ -2178,10 +2419,12 @@
       animation: love-fan-left 1400ms cubic-bezier(0.22, 1, 0.36, 1) both;
       animation-delay: 550ms;
     }
+
     #love.is-revealed .love-card[data-fan="center"] {
       animation: love-fan-center 1200ms cubic-bezier(0.22, 1, 0.36, 1) both;
       animation-delay: 450ms;
     }
+
     #love.is-revealed .love-card[data-fan="right"] {
       animation: love-fan-right 1400ms cubic-bezier(0.22, 1, 0.36, 1) both;
       animation-delay: 650ms;
@@ -2386,16 +2629,31 @@
 
     /* star position variants — straddle a different edge per active card */
     .love-card[data-star="top"] .love-star {
-      top: -11px; right: 18px; left: auto; bottom: auto;
+      top: -11px;
+      right: 18px;
+      left: auto;
+      bottom: auto;
     }
+
     .love-card[data-star="right"] .love-star {
-      top: 32px; right: -11px; left: auto; bottom: auto;
+      top: 32px;
+      right: -11px;
+      left: auto;
+      bottom: auto;
     }
+
     .love-card[data-star="bottom"] .love-star {
-      top: auto; right: 32px; left: auto; bottom: -11px;
+      top: auto;
+      right: 32px;
+      left: auto;
+      bottom: -11px;
     }
+
     .love-card[data-star="left"] .love-star {
-      top: 32px; right: auto; left: -11px; bottom: auto;
+      top: 32px;
+      right: auto;
+      left: -11px;
+      bottom: auto;
     }
 
     .love-card.active .love-star {
@@ -2610,8 +2868,16 @@
     }
 
     /* shared mask-text wrappers for char-split reveals */
-    .mask-wrap { display: inline-block; vertical-align: top; }
-    .mask-text { display: inline-block; will-change: transform; }
+    .mask-wrap {
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    .mask-text {
+      display: inline-block;
+      will-change: transform;
+    }
+
     .v-title .mask-wrap,
     .tile .overlay h4 .mask-wrap,
     .love-headline .mask-wrap {
@@ -2654,24 +2920,44 @@
     @media (max-width: 720px) {
 
       /* Safety net — clip any decorative elements that extend past viewport */
-      html, body { overflow-x: clip; max-width: 100%; }
-      section, header { overflow-x: clip; }
+      html,
+      body {
+        overflow-x: clip;
+        max-width: 100%;
+      }
+
+      section,
+      header {
+        overflow-x: clip;
+      }
 
       /* ---------- Globals ---------- */
       section,
       section.wrap {
         padding: 64px 32px !important;
       }
-      .hero.wrap { padding-left: 32px !important; padding-right: 32px !important; }
-      #about { padding: 80px 32px 72px !important; }
-      #work { padding-top: 96px !important; }
+
+      .hero.wrap {
+        padding-left: 32px !important;
+        padding-right: 32px !important;
+      }
+
+      #about {
+        padding: 80px 32px 72px !important;
+      }
+
+      #work {
+        padding-top: 96px !important;
+      }
+
       #love {
         padding-top: 120px !important;
         padding-bottom: 32px !important;
         overflow: visible !important;
         z-index: 3;
       }
-      #cta  {
+
+      #cta {
         min-height: 118svh;
         display: flex;
         align-items: center;
@@ -2680,8 +2966,13 @@
         padding-bottom: max(60px, calc(34svh - 120px)) !important;
       }
 
-      .section-head { margin-bottom: 40px; }
-      .section-title { font-size: clamp(34px, 10vw, 44px); }
+      .section-head {
+        margin-bottom: 40px;
+      }
+
+      .section-title {
+        font-size: clamp(34px, 10vw, 44px);
+      }
 
       .sys-reveal-trigger {
         opacity: 0;
@@ -2690,13 +2981,15 @@
           opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
           transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
       }
+
       .sys-reveal-trigger.is-revealed {
         opacity: 1;
         transform: translateY(0);
       }
-      .sys-reveal-trigger > .section-head,
+
+      .sys-reveal-trigger>.section-head,
       #services .value-grid,
-      #about .about-grid > div:first-child,
+      #about .about-grid>div:first-child,
       #work .bento,
       #love .love-title-row,
       #love .love-track-wrap,
@@ -2708,9 +3001,10 @@
           opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
           transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
       }
-      .sys-reveal-trigger.is-revealed > .section-head,
+
+      .sys-reveal-trigger.is-revealed>.section-head,
       #services.is-revealed .value-grid,
-      #about.is-revealed .about-grid > div:first-child,
+      #about.is-revealed .about-grid>div:first-child,
       #work.is-revealed .bento,
       #love.is-revealed .love-title-row,
       #love.is-revealed .love-track-wrap,
@@ -2725,6 +3019,7 @@
         padding: 16px 12px;
         transition: padding 620ms cubic-bezier(0.22, 1, 0.36, 1);
       }
+
       .nav-inner {
         gap: 0;
         padding: 10px 12px 10px 16px;
@@ -2735,6 +3030,7 @@
           border-radius 620ms cubic-bezier(0.22, 1, 0.36, 1),
           box-shadow 520ms ease;
       }
+
       nav.topnav.compact .nav-inner {
         width: 100% !important;
         max-width: 100% !important;
@@ -2742,13 +3038,21 @@
         justify-content: flex-start;
         gap: 8px;
       }
-      nav ul.links { display: none; }
-      .nav-grow { display: none; }
+
+      nav ul.links {
+        display: none;
+      }
+
+      .nav-grow {
+        display: none;
+      }
+
       .brand {
         transform: translateX(calc(50vw - 48px));
         transition: transform 680ms cubic-bezier(0.22, 1, 0.36, 1);
         will-change: transform;
       }
+
       nav.topnav.compact .brand {
         transform: translateX(0);
       }
@@ -2767,6 +3071,7 @@
           max-width 620ms cubic-bezier(0.22, 1, 0.36, 1);
         /* delay overflow clip removal so shadow isn't cropped when compact */
       }
+
       nav.topnav.compact .nav-right {
         opacity: 1;
         pointer-events: auto;
@@ -2775,6 +3080,7 @@
         transform: translateX(0) scale(1);
         overflow: visible;
       }
+
       .topnav.compact .nav-right .btn {
         height: 40px;
         padding: 0 16px;
@@ -2795,7 +3101,11 @@
         padding-bottom: 40px !important;
         text-align: center;
       }
-      .hero-title { order: 1; }
+
+      .hero-title {
+        order: 1;
+      }
+
       .hero-title {
         font-size: clamp(32px, 9vw, 46px) !important;
         line-height: 1.08;
@@ -2803,7 +3113,11 @@
         overflow-wrap: normal;
         hyphens: none;
       }
-      .hero-title .mask-text { white-space: nowrap; }
+
+      .hero-title .mask-text {
+        white-space: nowrap;
+      }
+
       .hero-sub {
         order: 2;
         width: auto !important;
@@ -2812,6 +3126,7 @@
         margin-right: auto;
         padding: 0 4px;
       }
+
       .hero-cta {
         order: 3;
         flex-direction: column;
@@ -2822,10 +3137,12 @@
         margin-left: auto;
         margin-right: auto;
       }
+
       .hero-cta .btn {
         width: 100%;
         justify-content: center;
       }
+
       .hero-stage {
         order: 5;
         width: 100% !important;
@@ -2834,11 +3151,13 @@
         aspect-ratio: auto;
         height: calc(62.5vw + 12px);
       }
+
       .proof {
         order: 4;
         width: 100%;
         margin-top: 40px;
       }
+
       .proof .logos {
         position: relative;
         width: 100%;
@@ -2849,6 +3168,7 @@
         -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
         mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
       }
+
       .proof .logos-track {
         display: flex !important;
         flex-wrap: nowrap;
@@ -2857,18 +3177,22 @@
         width: max-content;
         animation: logos-scroll 28s linear infinite;
       }
+
       .proof .logos-track .proof-logo {
         flex: 0 0 auto;
         white-space: nowrap;
         font-size: 17px;
       }
+
       .proof .logos-track .proof-logo.dup {
         display: flex;
       }
 
       /* pause marquee if user prefers reduced motion */
       @media (prefers-reduced-motion: reduce) {
-        .proof .logos-track { animation: none; }
+        .proof .logos-track {
+          animation: none;
+        }
       }
 
       /* ---------- Why me (services) ---------- */
@@ -2914,7 +3238,7 @@
       }
 
       /* Text column — full width minus section padding, centered */
-      #about .about-grid > div:first-child {
+      #about .about-grid>div:first-child {
         order: 2;
         width: 100%;
         max-width: 100%;
@@ -2946,13 +3270,15 @@
         opacity: 0;
         transform: translateY(16px);
         transition: opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
-                    transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+          transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
         transition-delay: 150ms;
       }
+
       #about.is-revealed .about-portrait {
         opacity: 1;
         transform: translateY(0);
       }
+
       #about .about-portrait img {
         display: block;
         width: 100% !important;
@@ -2968,14 +3294,14 @@
           linear-gradient(to right,
             transparent 0%, black 16%, black 84%, transparent 100%),
           linear-gradient(to bottom,
-            transparent 0%, rgba(0,0,0,0.4) 7%, black 16%, black 100%) !important;
-                mask-image:
+            transparent 0%, rgba(0, 0, 0, 0.4) 7%, black 16%, black 100%) !important;
+        mask-image:
           linear-gradient(to right,
             transparent 0%, black 16%, black 84%, transparent 100%),
           linear-gradient(to bottom,
-            transparent 0%, rgba(0,0,0,0.4) 7%, black 16%, black 100%) !important;
+            transparent 0%, rgba(0, 0, 0, 0.4) 7%, black 16%, black 100%) !important;
         -webkit-mask-composite: source-in !important;
-                mask-composite: intersect !important;
+        mask-composite: intersect !important;
       }
 
       /* Typography — all centered blocks, reset desktop widths */
@@ -2984,6 +3310,7 @@
         text-align: center;
         margin: 0 0 6px;
       }
+
       #about .about-title {
         font-size: clamp(40px, 12vw, 56px);
         text-align: center;
@@ -2991,14 +3318,17 @@
         word-break: normal;
         overflow-wrap: normal;
       }
+
       #about.is-revealed .about-title .char {
         animation-delay: calc(620ms + (var(--char-index) * 35ms));
       }
+
       #about .about-body {
         width: 100%;
         font-size: 16px;
         text-align: center;
       }
+
       #about .about-body p {
         width: 100%;
         max-width: 100% !important;
@@ -3006,6 +3336,7 @@
         text-align: center;
         box-sizing: border-box;
       }
+
       #about .about-sig {
         display: block;
         width: 100%;
@@ -3014,13 +3345,18 @@
         letter-spacing: -2px !important;
         text-align: center;
       }
-      #about .about-sig .mask-wrap { display: inline-block !important; }
+
+      #about .about-sig .mask-wrap {
+        display: inline-block !important;
+      }
+
       #about .about-sig-img {
         display: none;
         height: auto;
         width: 32vw;
         max-width: 100%;
       }
+
       #about.is-revealed .about-sig .char {
         animation-delay: calc(1400ms + (var(--char-index) * 40ms));
       }
@@ -3031,11 +3367,13 @@
         grid-auto-rows: auto;
         gap: 16px;
       }
+
       .bento .tile {
         grid-column: span 1 !important;
         grid-row: span 1 !important;
         height: auto;
       }
+
       .bento .tile.t-wide,
       .bento .tile.t-sq,
       .bento .tile.t-mid,
@@ -3053,19 +3391,39 @@
           transform 1100ms cubic-bezier(0.22, 1, 0.36, 1);
         transition-delay: 0ms;
       }
+
       #work.is-revealed .bento .tile.fade-el {
         opacity: 1;
         transform: translateY(0) scale(1);
       }
+
       #work.is-revealed .section-title .char {
         animation-delay: calc(260ms + (var(--char-index) * 35ms));
       }
-      #work.is-revealed .bento .tile.fade-el:nth-child(1) { transition-delay: 400ms; }
-      #work.is-revealed .bento .tile.fade-el:nth-child(2) { transition-delay: 520ms; }
-      #work.is-revealed .bento .tile.fade-el:nth-child(3) { transition-delay: 600ms; }
-      #work.is-revealed .bento .tile.fade-el:nth-child(4) { transition-delay: 680ms; }
-      #work.is-revealed .bento .tile.fade-el:nth-child(5) { transition-delay: 560ms; }
-      #work.is-revealed .bento .tile.fade-el:nth-child(6) { transition-delay: 740ms; }
+
+      #work.is-revealed .bento .tile.fade-el:nth-child(1) {
+        transition-delay: 400ms;
+      }
+
+      #work.is-revealed .bento .tile.fade-el:nth-child(2) {
+        transition-delay: 520ms;
+      }
+
+      #work.is-revealed .bento .tile.fade-el:nth-child(3) {
+        transition-delay: 600ms;
+      }
+
+      #work.is-revealed .bento .tile.fade-el:nth-child(4) {
+        transition-delay: 680ms;
+      }
+
+      #work.is-revealed .bento .tile.fade-el:nth-child(5) {
+        transition-delay: 560ms;
+      }
+
+      #work.is-revealed .bento .tile.fade-el:nth-child(6) {
+        transition-delay: 740ms;
+      }
 
       /* After reveal completes, hand off to JS scroll-drift (inline transform) */
       #work.reveal-done .bento .tile.fade-el {
@@ -3073,11 +3431,18 @@
       }
 
       /* ---------- Love letters ---------- */
-      .love-title-row { margin-bottom: 32px; }
-      .love-title { font-size: clamp(40px, 12vw, 52px); }
+      .love-title-row {
+        margin-bottom: 32px;
+      }
+
+      .love-title {
+        font-size: clamp(40px, 12vw, 52px);
+      }
+
       .love-card {
         flex: 0 0 min(72vw, 340px);
       }
+
       .love-track-wrap {
         padding: 28px 0 40px;
         margin-left: -32px;
@@ -3087,6 +3452,7 @@
         -webkit-mask-image: none;
         mask-image: none;
       }
+
       .love-track-wrap::before,
       .love-track-wrap::after {
         content: "";
@@ -3097,20 +3463,24 @@
         pointer-events: none;
         z-index: 2;
       }
+
       .love-track-wrap::before {
         left: 0;
         background: linear-gradient(to right, var(--bg), rgba(250, 248, 248, 0));
       }
+
       .love-track-wrap::after {
         right: 0;
         background: linear-gradient(to left, var(--bg), rgba(250, 248, 248, 0));
       }
+
       .love-track {
         padding-left: 0;
         padding-right: 0;
         position: relative;
         z-index: 1;
       }
+
       .love-nav {
         margin-top: 4px;
         padding-bottom: 24px;
@@ -3119,9 +3489,11 @@
         overflow: visible;
         z-index: 10;
       }
+
       #love.is-revealed .love-nav {
         transform: none;
       }
+
       .love-nav button {
         position: relative;
         z-index: 1;
@@ -3139,6 +3511,7 @@
         overflow: visible;
         padding: 84px 16px 120px;
       }
+
       .cta-visual {
         position: absolute;
         left: calc(50% - 52vw);
@@ -3153,31 +3526,37 @@
         -webkit-mask-image: radial-gradient(ellipse 58% 58% at 50% 50%, black 26%, rgba(0, 0, 0, 0.72) 58%, rgba(0, 0, 0, 0.16) 86%, transparent 100%);
         mask-image: radial-gradient(ellipse 58% 58% at 50% 50%, black 26%, rgba(0, 0, 0, 0.72) 58%, rgba(0, 0, 0, 0.16) 86%, transparent 100%);
       }
+
       .cta-visual video {
         width: 100% !important;
         height: 100% !important;
         object-fit: cover !important;
         border-radius: 0 !important;
       }
+
       #cta .cta-title,
       #cta .cta-sub,
       #cta .btn {
         position: relative;
         z-index: 1;
       }
+
       .cta-title {
         font-size: clamp(36px, 11vw, 48px);
         width: 100%;
         margin-top: max(72px, min(calc(48vw + 52px), 260px));
       }
+
       .cta-title .cta-brk {
         display: block;
         width: 100%;
         height: 0;
       }
+
       .cta-sub {
         margin-bottom: 24px;
       }
+
       .cta-box .btn-lg {
         width: 100%;
         max-width: 360px;
@@ -3228,7 +3607,8 @@
       <span class="mask-wrap" style="padding-top:4px;"><span class="mask-text"><em>your</em> product
           needs</span></span>
     </h1>
-    <p class="hero-sub" style="width:520px">From idea to product, or as part of your team.<br>I step in where needed.</p>
+    <p class="hero-sub" style="width:520px">From idea to product, or as part of your team.<br>I step in where needed.
+    </p>
     <div class="hero-cta">
       <a class="btn btn-lg btn-ghost" href="#work">See my work</a>
       <a class="btn btn-lg btn-primary" href="#cta"><span class="btn-ring"></span><span class="btn-shine"></span><span
@@ -3276,7 +3656,8 @@
     </div>
     <div class="value-grid">
       <article class="v-card fade-el" style="--stg: 2;">
-        <div class="v-video"><video src="assets/card1.mp4?v=2" muted playsinline loop preload="metadata" data-card-video></video></div>
+        <div class="v-video"><video src="assets/card1.mp4?v=2" muted playsinline loop preload="metadata"
+            data-card-video></video></div>
         <div class="v-body">
           <div class="v-tag">For founders</div>
           <h3 class="v-title">Build from scratch</h3>
@@ -3285,7 +3666,8 @@
         <span class="corner-glow"></span>
       </article>
       <article class="v-card fade-el" style="--stg: 3;">
-        <div class="v-video"><video src="assets/card2.mp4?v=2" muted playsinline loop preload="metadata" data-card-video></video></div>
+        <div class="v-video"><video src="assets/card2.mp4?v=2" muted playsinline loop preload="metadata"
+            data-card-video></video></div>
         <div class="v-body">
           <div class="v-tag">For existing products</div>
           <h3 class="v-title">Make it better</h3>
@@ -3294,7 +3676,8 @@
         <span class="corner-glow"></span>
       </article>
       <article class="v-card fade-el" style="--stg: 4;">
-        <div class="v-video"><video src="assets/card3.mp4?v=2" muted playsinline loop preload="metadata" data-card-video></video></div>
+        <div class="v-video"><video src="assets/card3.mp4?v=2" muted playsinline loop preload="metadata"
+            data-card-video></video></div>
         <div class="v-body">
           <div class="v-tag">For a boost</div>
           <h3 class="v-title">Join your team</h3>
@@ -3317,7 +3700,8 @@
           <p>I focus on turning complexity into simple, clear, and beautiful products — quick to adapt, and focused on
             what actually moves things forward.</p>
         </div>
-        <div class="about-sig" style="letter-spacing:-3.2px"><span class="mask-wrap"><span class="mask-text">Sagi Hatan</span></span><img class="about-sig-img" src="assets/signature_mobile.svg" alt="Sagi Hatan"></div>
+        <div class="about-sig" style="letter-spacing:-3.2px"><span class="mask-wrap"><span class="mask-text">Sagi
+              Hatan</span></span><img class="about-sig-img" src="assets/signature_mobile.svg" alt="Sagi Hatan"></div>
       </div>
       <div class="about-portrait">
         <img src="assets/profile.png" alt="Sagi Hatan" width="976" height="565" loading="lazy" decoding="async" />
@@ -3328,11 +3712,12 @@
   <!-- WORK -->
   <section id="work" class="wrap sys-reveal-trigger">
     <div class="section-head">
-      <h2 class="section-title"><span class="mask-wrap" style="margin-right:0.3em;"><span class="mask-text">Recent</span></span><span
-          class="mask-wrap"><span class="mask-text"><em>works</em></span></span></h2>
+      <h2 class="section-title"><span class="mask-wrap" style="margin-right:0.3em;"><span
+            class="mask-text">Recent</span></span><span class="mask-wrap"><span
+            class="mask-text"><em>works</em></span></span></h2>
     </div>
     <div class="bento">
-      <div class="tile t-wide art-1 fade-el" data-label="Music streaming">
+      <div class="tile t-wide art-1 fade-el" data-project-number="01" data-label="Music streaming">
         <div class="art mock">
           <div class="mock-player">
             <div class="sub">Now playing · 02:14</div>
@@ -3379,14 +3764,24 @@
           </div>
         </div>
         <div class="overlay">
-          <div class="kicker">Case study · 2025</div>
-          <h4>Midori Music</h4>
-          <p>Rebuilt the listening experience from player up — 38% longer sessions in first month.</p>
+          <div class="project-content">
+            <div class="project-brand">
+              <div class="project-icon accent-teal">M</div>
+              <div class="project-copy">
+                <h4 class="project-name">Midori Music</h4>
+                <p class="project-subtext">Music streaming platform</p>
+              </div>
+            </div>
+            <div class="project-tags" aria-label="Project tags">
+              <span class="project-tag">Product Design</span>
+              <span class="project-tag">Mobile App</span>
+            </div>
+          </div>
         </div>
         <span class="glow"></span>
       </div>
 
-      <div class="tile t-sq art-2 fade-el">
+      <div class="tile t-sq art-2 fade-el" data-project-number="02">
         <div class="art mock">
           <div class="mock-logo">F<span
               style="font-family:var(--font-serif);font-weight:400;font-style:italic">ast</span>
@@ -3394,14 +3789,24 @@
           </div>
         </div>
         <div class="overlay">
-          <div class="kicker">Brand · 2025</div>
-          <h4>Fast Logistics</h4>
-          <p>End-to-end identity for a same-day delivery platform.</p>
+          <div class="project-content">
+            <div class="project-brand">
+              <div class="project-icon accent-teal">F</div>
+              <div class="project-copy">
+                <h4 class="project-name">Fast Logistics</h4>
+                <p class="project-subtext">Same-day delivery platform</p>
+              </div>
+            </div>
+            <div class="project-tags" aria-label="Project tags">
+              <span class="project-tag">Branding</span>
+              <span class="project-tag">Identity</span>
+            </div>
+          </div>
         </div>
         <span class="glow"></span>
       </div>
 
-      <div class="tile t-mid art-4 fade-el">
+      <div class="tile t-mid art-4 fade-el" data-project-number="03">
         <div class="art">
           <div class="mock-flow">
             <div class="side"><i class="a"></i><i></i><i></i><i></i><i></i></div>
@@ -3410,26 +3815,46 @@
           </div>
         </div>
         <div class="overlay">
-          <div class="kicker">SaaS · 2024</div>
-          <h4>Halcyon CRM</h4>
-          <p>Information architecture rewrite. Cut onboarding time in half.</p>
+          <div class="project-content">
+            <div class="project-brand">
+              <div class="project-icon accent-violet">H</div>
+              <div class="project-copy">
+                <h4 class="project-name">Halcyon CRM</h4>
+                <p class="project-subtext">Customer relationship suite</p>
+              </div>
+            </div>
+            <div class="project-tags" aria-label="Project tags">
+              <span class="project-tag">SaaS</span>
+              <span class="project-tag">UX Design</span>
+            </div>
+          </div>
         </div>
         <span class="glow"></span>
       </div>
 
-      <div class="tile t-mid art-5 fade-el">
+      <div class="tile t-mid art-5 fade-el" data-project-number="04">
         <div class="art mock-orb">
           <div class="o"></div>
         </div>
         <div class="overlay">
-          <div class="kicker">AI product · 2025</div>
-          <h4>Aurora Studio</h4>
-          <p>Interface for a generative motion tool — exploration, not the grid.</p>
+          <div class="project-content">
+            <div class="project-brand">
+              <div class="project-icon accent-plum">A</div>
+              <div class="project-copy">
+                <h4 class="project-name">Aurora Studio</h4>
+                <p class="project-subtext">Generative motion tool</p>
+              </div>
+            </div>
+            <div class="project-tags" aria-label="Project tags">
+              <span class="project-tag">AI Product</span>
+              <span class="project-tag">Interaction</span>
+            </div>
+          </div>
         </div>
         <span class="glow"></span>
       </div>
 
-      <div class="tile t-lg art-3 fade-el">
+      <div class="tile t-lg art-3 fade-el" data-project-number="05">
         <div class="art">
           <div class="mock-dash">
             <div class="h">
@@ -3455,14 +3880,24 @@
           </div>
         </div>
         <div class="overlay">
-          <div class="kicker">Fintech · 2024</div>
-          <h4>Ledger Cash</h4>
-          <p>Consumer banking, designed so numbers stop being scary.</p>
+          <div class="project-content">
+            <div class="project-brand">
+              <div class="project-icon accent-amber">L</div>
+              <div class="project-copy">
+                <h4 class="project-name">Ledger Cash</h4>
+                <p class="project-subtext">Consumer banking app</p>
+              </div>
+            </div>
+            <div class="project-tags" aria-label="Project tags">
+              <span class="project-tag">Fintech</span>
+              <span class="project-tag">Product Design</span>
+            </div>
+          </div>
         </div>
         <span class="glow"></span>
       </div>
 
-      <div class="tile t-sq art-6 fade-el">
+      <div class="tile t-sq art-6 fade-el" data-project-number="06">
         <div class="art">
           <div class="mock-wallet">
             <div class="label">Ledger · Savings</div>
@@ -3474,9 +3909,19 @@
           </div>
         </div>
         <div class="overlay">
-          <div class="kicker">Component · 2025</div>
-          <h4>Wallet card</h4>
-          <p>A tiny thing, but it set the tone for the whole app.</p>
+          <div class="project-content">
+            <div class="project-brand">
+              <div class="project-icon accent-violet">W</div>
+              <div class="project-copy">
+                <h4 class="project-name">Wallet card</h4>
+                <p class="project-subtext">Finance component system</p>
+              </div>
+            </div>
+            <div class="project-tags" aria-label="Project tags">
+              <span class="project-tag">Component</span>
+              <span class="project-tag">UI System</span>
+            </div>
+          </div>
         </div>
         <span class="glow"></span>
       </div>
@@ -3486,96 +3931,112 @@
   <!-- TESTIMONIALS -->
   <section id="love" class="wrap sys-reveal-trigger">
     <div class="love-title-row">
-      <h2 class="love-title"><span class="mask-wrap" style="margin-right:0.3em;"><span class="mask-text">Love</span></span><span
-          class="mask-wrap"><span class="mask-text"><em>letters</em></span></span></h2>
+      <h2 class="love-title"><span class="mask-wrap" style="margin-right:0.3em;"><span
+            class="mask-text">Love</span></span><span class="mask-wrap"><span
+            class="mask-text"><em>letters</em></span></span></h2>
     </div>
     <div class="love-track-wrap">
       <div class="love-track" id="love-track">
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
           <div class="love-who">
-            <div class="av"><img src="assets/daphna.webp" alt="Daphna Langer" width="40" height="40" loading="lazy" decoding="async"></div>
+            <div class="av"><img src="assets/daphna.webp" alt="Daphna Langer" width="40" height="40" loading="lazy"
+                decoding="async"></div>
             <div>
               <div class="name">Daphna Langer</div>
               <div class="role">CEO</div>
             </div>
           </div>
           <h4 class="love-headline">&ldquo;Most talented designer I have ever worked with.&rdquo;</h4>
-          <p class="love-body">His ability to transform theoretical concepts into tangible designs is remarkable, almost as if he can read minds. He has an exceptional eye for detail and infuses originality into every project.</p>
+          <p class="love-body">His ability to transform theoretical concepts into tangible designs is remarkable, almost
+            as if he can read minds. He has an exceptional eye for detail and infuses originality into every project.
+          </p>
         </article>
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
           <div class="love-who">
-            <div class="av"><img src="assets/sapir.jpeg" alt="Sapir Aran" width="40" height="40" loading="lazy" decoding="async"></div>
+            <div class="av"><img src="assets/sapir.jpeg" alt="Sapir Aran" width="40" height="40" loading="lazy"
+                decoding="async"></div>
             <div>
               <div class="name">Sapir Aran</div>
               <div class="role">Co-founder</div>
             </div>
           </div>
           <h4 class="love-headline">&ldquo;Incredibly talented UX/UI designer.&rdquo;</h4>
-          <p class="love-body">His user-centric designs were both beautiful and functional, greatly enhancing our product's success. He consistently delivered high-quality work on time.</p>
+          <p class="love-body">His user-centric designs were both beautiful and functional, greatly enhancing our
+            product's success. He consistently delivered high-quality work on time.</p>
         </article>
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
           <div class="love-who">
-            <div class="av"><img src="assets/lior.jpeg" alt="Lior Avisar" width="40" height="40" loading="lazy" decoding="async"></div>
+            <div class="av"><img src="assets/lior.jpeg" alt="Lior Avisar" width="40" height="40" loading="lazy"
+                decoding="async"></div>
             <div>
               <div class="name">Lior Avisar</div>
               <div class="role">Founder</div>
             </div>
           </div>
           <h4 class="love-headline">&ldquo;Transformed a basic concept into a stunning, functional product.&rdquo;</h4>
-          <p class="love-body">Sagi was absolutely instrumental, showing extraordinary dedication and performance under pressure. His work was crucial to our success and showcased exceptional design and problem-solving.</p>
+          <p class="love-body">Sagi was absolutely instrumental, showing extraordinary dedication and performance under
+            pressure. His work was crucial to our success and showcased exceptional design and problem-solving.</p>
         </article>
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
           <div class="love-who">
-            <div class="av"><img src="assets/raz.jpeg" alt="Raz Ronen" width="40" height="40" loading="lazy" decoding="async"></div>
+            <div class="av"><img src="assets/raz.jpeg" alt="Raz Ronen" width="40" height="40" loading="lazy"
+                decoding="async"></div>
             <div>
               <div class="name">Raz Ronen</div>
               <div class="role">CEO</div>
             </div>
           </div>
           <h4 class="love-headline">&ldquo;An exceptional professional.&rdquo;</h4>
-          <p class="love-body">Working with Sagi means you can rest easy, knowing that your requests will be met on time and exceed your expectations. His ability to tackle complex problems is truly impressive.</p>
+          <p class="love-body">Working with Sagi means you can rest easy, knowing that your requests will be met on time
+            and exceed your expectations. His ability to tackle complex problems is truly impressive.</p>
         </article>
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
           <div class="love-who">
-            <div class="av"><img src="assets/itay.jpeg" alt="Itay N." width="40" height="40" loading="lazy" decoding="async"></div>
+            <div class="av"><img src="assets/itay.jpeg" alt="Itay N." width="40" height="40" loading="lazy"
+                decoding="async"></div>
             <div>
               <div class="name">Itay N.</div>
               <div class="role">CEO</div>
             </div>
           </div>
           <h4 class="love-headline">&ldquo;Intuitive, user-friendly designs that exceed expectations.&rdquo;</h4>
-          <p class="love-body">His ability to understand user needs and translate them into seamless experiences is remarkable. His attention to detail and creative problem-solving stand out.</p>
+          <p class="love-body">His ability to understand user needs and translate them into seamless experiences is
+            remarkable. His attention to detail and creative problem-solving stand out.</p>
         </article>
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
           <div class="love-who">
-            <div class="av"><img src="assets/tal.jpeg" alt="Tal Gershenman" width="40" height="40" loading="lazy" decoding="async"></div>
+            <div class="av"><img src="assets/tal.jpeg" alt="Tal Gershenman" width="40" height="40" loading="lazy"
+                decoding="async"></div>
             <div>
               <div class="name">Tal Gershenman</div>
               <div class="role">Director of Product</div>
             </div>
           </div>
           <h4 class="love-headline">&ldquo;Designs that meet the highest standards.&rdquo;</h4>
-          <p class="love-body">Sagi meticulously studies products to craft tailored solutions for every need. His professionalism is outstanding, and his work consistently delivers high-quality results.</p>
+          <p class="love-body">Sagi meticulously studies products to craft tailored solutions for every need. His
+            professionalism is outstanding, and his work consistently delivers high-quality results.</p>
         </article>
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
           <div class="love-who">
-            <div class="av"><img src="assets/omri_y.jpeg" alt="Omri Yeheskel" width="40" height="40" loading="lazy" decoding="async"></div>
+            <div class="av"><img src="assets/omri_y.jpeg" alt="Omri Yeheskel" width="40" height="40" loading="lazy"
+                decoding="async"></div>
             <div>
               <div class="name">Omri Yeheskel</div>
               <div class="role">Founder</div>
             </div>
           </div>
           <h4 class="love-headline">&ldquo;#1 designer by far.&rdquo;</h4>
-          <p class="love-body">Sagi is super talented and a real professional. I will keep working with Sagi for ongoing UI/UX needs and truly recommend him.</p>
+          <p class="love-body">Sagi is super talented and a real professional. I will keep working with Sagi for ongoing
+            UI/UX needs and truly recommend him.</p>
         </article>
-      
+
       </div>
     </div>
     <div class="love-nav">
@@ -3597,8 +4058,8 @@
         <video src="assets/cta.mp4" muted playsinline loop preload="metadata" data-card-video
           style="width:100%;height:100%;object-fit:contain;border-radius:16px;"></video>
       </div>
-      <h2 class="cta-title"><span class="mask-wrap"><span class="mask-text">Ready <em>when</em></span></span><span class="cta-brk"></span> <span
-          class="mask-wrap"><span class="mask-text">you are</span></span></h2>
+      <h2 class="cta-title"><span class="mask-wrap"><span class="mask-text">Ready <em>when</em></span></span><span
+          class="cta-brk"></span> <span class="mask-wrap"><span class="mask-text">you are</span></span></h2>
       <p class="cta-sub">No long onboarding. Let&rsquo;s get started.</p>
       <a href="#" class="btn btn-lg btn-primary"><span class="btn-ring"></span><span class="btn-shine"></span><span
           class="btn-label">Book a call</span></a>
@@ -3660,9 +4121,9 @@
       const tryPlay = (v) => {
         try {
           const p = v.play();
-          if (p && p.then) p.then(() => played.add(v)).catch(() => {});
+          if (p && p.then) p.then(() => played.add(v)).catch(() => { });
           else played.add(v);
-        } catch (e) {}
+        } catch (e) { }
       };
 
       // Force iOS Safari to paint the first frame (it otherwise shows blank
@@ -3670,7 +4131,7 @@
       // Low Power Mode or weak connections)
       vids.forEach(v => {
         const paintFirstFrame = () => {
-          try { v.currentTime = 0.05; } catch (e) {}
+          try { v.currentTime = 0.05; } catch (e) { }
         };
         if (v.readyState >= 1) paintFirstFrame();
         else v.addEventListener('loadedmetadata', paintFirstFrame, { once: true });
@@ -3844,7 +4305,7 @@
           dragging = true;
           locked = false;
           pointerId = e.pointerId;
-          try { track.setPointerCapture(pointerId); } catch (_) {}
+          try { track.setPointerCapture(pointerId); } catch (_) { }
           track.classList.add('is-dragging');
           track.style.transition = 'none';
         }
@@ -3878,7 +4339,7 @@
           if (!dragging) return;
           dragging = false;
           track.classList.remove('is-dragging');
-          try { track.releasePointerCapture(pointerId); } catch (_) {}
+          try { track.releasePointerCapture(pointerId); } catch (_) { }
           const threshold = swipeThreshold();
           if (locked === 'x' && Math.abs(dx) > threshold) {
             const dir = dx < 0 ? +1 : -1;
@@ -3920,11 +4381,11 @@
         // animationend cleanup hands control back to normal carousel styles.
         const centerIdx = loveIdx;
         const cCenter = track.children[centerIdx];
-        const cLeft   = track.children[centerIdx - 1];
-        const cRight  = track.children[centerIdx + 1];
+        const cLeft = track.children[centerIdx - 1];
+        const cRight = track.children[centerIdx + 1];
         if (cCenter) cCenter.setAttribute('data-fan', 'center');
-        if (cLeft)   cLeft.setAttribute('data-fan', 'left');
-        if (cRight)  cRight.setAttribute('data-fan', 'right');
+        if (cLeft) cLeft.setAttribute('data-fan', 'left');
+        if (cRight) cRight.setAttribute('data-fan', 'right');
       });
     })();
 
@@ -3937,7 +4398,7 @@
         if (d.type === '__activate_edit_mode') fab.classList.add('show');
         if (d.type === '__deactivate_edit_mode') { fab.classList.remove('show'); panel.classList.remove('show'); }
       });
-      try { window.parent.postMessage({ type: '__edit_mode_available' }, '*'); } catch (e) {}
+      try { window.parent.postMessage({ type: '__edit_mode_available' }, '*'); } catch (e) { }
       fab.addEventListener('click', () => panel.classList.toggle('show'));
 
       function bindSwatches(selector, key) {
@@ -3945,7 +4406,7 @@
           s.addEventListener('click', () => {
             TWEAKS[key] = s.dataset[key === 'accentHue' ? 'hue' : 'bg'];
             applyTweaks();
-            try { window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [key]: TWEAKS[key] } }, '*'); } catch (e) {}
+            try { window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [key]: TWEAKS[key] } }, '*'); } catch (e) { }
           });
         });
       }

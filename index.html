@@ -26,6 +26,7 @@
       --bg: #FAF8F8;
       --bg-2: #F3EEF0;
       --ink: #0B0B0F;
+      --ink-70: #5F5F5F;
       --ink-60: rgba(11, 11, 15, 0.62);
       --ink-45: rgba(11, 11, 15, 0.45);
       --ink-15: rgba(11, 11, 15, 0.12);
@@ -36,9 +37,14 @@
       --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 10px 30px -10px rgba(16, 24, 40, 0.10), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
       --font-sans: "Bricolage Grotesque", system-ui, sans-serif;
       --font-serif: "Instrument Serif", Georgia, serif;
-      --font-body: "Satoshi", "DM Sans", system-ui, sans-serif;
+      --font-body: "Satoshi", system-ui, sans-serif;
       --font-hand: "Caveat", cursive;
       --font-mono: "JetBrains Mono", ui-monospace, monospace;
+      --body-copy-size: 16px;
+      --body-copy-line: 1.5;
+      --body-copy-weight: 450;
+      --body-copy-spacing: 0.01em;
+      --body-copy-color: var(--ink-70);
     }
 
     * {
@@ -82,6 +88,20 @@
       border: 0;
       background: none;
       cursor: pointer;
+    }
+
+    .body-copy,
+    .hero-sub,
+    .v-desc,
+    .about-body p,
+    .cta-sub,
+    .love-body {
+      font-family: var(--font-body);
+      font-size: var(--body-copy-size);
+      line-height: var(--body-copy-line);
+      font-weight: var(--body-copy-weight);
+      letter-spacing: var(--body-copy-spacing);
+      color: var(--body-copy-color);
     }
 
     /* ─── PREMIUM HERO REVEAL ─────────────────────── */
@@ -724,11 +744,8 @@
     }
 
     .hero-sub {
-      font-size: 18px;
-      color: var(--ink-60);
       max-width: 520px;
       margin: 0 auto 36px;
-      line-height: 1.55;
     }
 
     .hero-cta {
@@ -1037,9 +1054,6 @@
     }
 
     .v-desc {
-      font-size: 14px;
-      color: var(--ink-60);
-      line-height: 1.55;
       margin: 0;
     }
 
@@ -1229,9 +1243,6 @@
     }
 
     .about-body p {
-      font-size: 16px;
-      line-height: 1.65;
-      color: var(--ink-60);
       margin: 0 0 14px;
       max-width: 42ch;
     }
@@ -2055,8 +2066,6 @@
     }
 
     .cta-sub {
-      color: var(--ink-60);
-      font-size: 18px;
       margin: 0 0 32px;
     }
 
@@ -2453,15 +2462,12 @@
     }
 
     .love-body {
-      font-size: 14px;
-      line-height: 1.65;
-      color: var(--ink-60);
       margin: 8px 0 0;
     }
 
     .love-body em {
       font-style: normal;
-      color: var(--ink-60);
+      color: var(--body-copy-color);
     }
 
     .love-brand {
@@ -2659,11 +2665,17 @@
       .hero.wrap { padding-left: 32px !important; padding-right: 32px !important; }
       #about { padding: 80px 32px 72px !important; }
       #work { padding-top: 96px !important; }
-      #love { padding-top: 120px !important; padding-bottom: 32px !important; }
+      #love {
+        padding-top: 120px !important;
+        padding-bottom: 32px !important;
+        overflow: visible !important;
+        z-index: 3;
+      }
       #cta  {
         min-height: 118svh;
         display: flex;
         align-items: center;
+        z-index: 1;
         padding-top: 32px !important;
         padding-bottom: max(60px, calc(34svh - 120px)) !important;
       }
@@ -3064,20 +3076,55 @@
       .love-title-row { margin-bottom: 32px; }
       .love-title { font-size: clamp(40px, 12vw, 52px); }
       .love-card {
-        flex: 0 0 100%;
+        flex: 0 0 min(72vw, 340px);
       }
       .love-track-wrap {
-        padding: 28px 8px 40px;
-        margin: 0;
+        padding: 28px 0 40px;
+        margin-left: -32px;
+        margin-right: -32px;
+        position: relative;
+        overflow: visible;
         -webkit-mask-image: none;
         mask-image: none;
+      }
+      .love-track-wrap::before,
+      .love-track-wrap::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 36px;
+        pointer-events: none;
+        z-index: 2;
+      }
+      .love-track-wrap::before {
+        left: 0;
+        background: linear-gradient(to right, var(--bg), rgba(250, 248, 248, 0));
+      }
+      .love-track-wrap::after {
+        right: 0;
+        background: linear-gradient(to left, var(--bg), rgba(250, 248, 248, 0));
       }
       .love-track {
         padding-left: 0;
         padding-right: 0;
+        position: relative;
+        z-index: 1;
       }
       .love-nav {
         margin-top: 4px;
+        padding-bottom: 24px;
+        margin-bottom: -24px;
+        position: relative;
+        overflow: visible;
+        z-index: 10;
+      }
+      #love.is-revealed .love-nav {
+        transform: none;
+      }
+      .love-nav button {
+        position: relative;
+        z-index: 1;
       }
 
       /* ---------- CTA ---------- */
@@ -3129,7 +3176,6 @@
         height: 0;
       }
       .cta-sub {
-        font-size: 16px;
         margin-bottom: 24px;
       }
       .cta-box .btn-lg {
@@ -3182,8 +3228,7 @@
       <span class="mask-wrap" style="padding-top:4px;"><span class="mask-text"><em>your</em> product
           needs</span></span>
     </h1>
-    <p class="hero-sub" style="width:520px;font-size:16px">From idea to product, or as part of your team — I step in
-      where needed.</p>
+    <p class="hero-sub" style="width:520px">From idea to product, or as part of your team.<br>I step in where needed.</p>
     <div class="hero-cta">
       <a class="btn btn-lg btn-ghost" href="#work">See my work</a>
       <a class="btn btn-lg btn-primary" href="#cta"><span class="btn-ring"></span><span class="btn-shine"></span><span
@@ -3214,7 +3259,7 @@
     <div class="hero-stage" aria-hidden="true">
       <div class="hero-stage-chrome"><span class="d"></span><span class="d"></span><span class="d"></span></div>
       <div class="hero-stage-inner">
-        <span class="placeholder-label">Video placeholder</span>
+        <span class="placeholder-label">recent-case-study.mp4 · drop in</span>
       </div>
     </div>
   </header>
@@ -3455,44 +3500,8 @@
               <div class="role">CEO</div>
             </div>
           </div>
-          <h4 class="love-headline">&ldquo;Transforms theoretical concepts into tangible designs, almost as if he can read minds.&rdquo;</h4>
-          <p class="love-body">Sagi is the most talented designer I have ever worked with. His ability to transform theoretical concepts into tangible designs is remarkable, almost as if he can read minds. He has an exceptional eye for detail and infuses originality into every project. Sagi works quickly yet meticulously, always remaining highly responsive and open to feedback.</p>
-        </article>
-        <article class="love-card">
-          <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
-          <div class="love-who">
-            <div class="av"><img src="assets/tal.jpeg" alt="Tal Gershenman" width="40" height="40" loading="lazy" decoding="async"></div>
-            <div>
-              <div class="name">Tal Gershenman</div>
-              <div class="role">Director of Product</div>
-            </div>
-          </div>
-          <h4 class="love-headline">&ldquo;Designs consistently meet the highest standards.&rdquo;</h4>
-          <p class="love-body">Sagi is the perfect choice for anyone looking for design services. He meticulously studies products to craft tailored solutions for every need. Having worked closely with him as a Product Manager for several years, I can confirm that his designs consistently meet the highest standards. One of the nicest people I've had the pleasure of working with.</p>
-        </article>
-        <article class="love-card">
-          <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
-          <div class="love-who">
-            <div class="av"><img src="assets/lior.jpeg" alt="Lior Avisar" width="40" height="40" loading="lazy" decoding="async"></div>
-            <div>
-              <div class="name">Lior Avisar</div>
-              <div class="role">Founder</div>
-            </div>
-          </div>
-          <h4 class="love-headline">&ldquo;Transformed a basic concept into a stunning, functional product in days.&rdquo;</h4>
-          <p class="love-body">During the voluntary Door2Dor project, Sagi was absolutely instrumental. In just a few days, he transformed a basic concept into a stunning, functional product. His extraordinary dedication and performance under pressure were crucial to our success.</p>
-        </article>
-        <article class="love-card">
-          <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
-          <div class="love-who">
-            <div class="av"><img src="assets/raz.jpeg" alt="Raz Ronen" width="40" height="40" loading="lazy" decoding="async"></div>
-            <div>
-              <div class="name">Raz Ronen</div>
-              <div class="role">CEO</div>
-            </div>
-          </div>
-          <h4 class="love-headline">&ldquo;Requests are met on time and exceed expectations.&rdquo;</h4>
-          <p class="love-body">Sagi is an exceptional professional. Working with him means you can rest easy knowing that your requests will be met on time and exceed your expectations. His ability to tackle complex problems and infuse vibrant energy into a brand is truly impressive.</p>
+          <h4 class="love-headline">&ldquo;Most talented designer I have ever worked with.&rdquo;</h4>
+          <p class="love-body">His ability to transform theoretical concepts into tangible designs is remarkable, almost as if he can read minds. He has an exceptional eye for detail and infuses originality into every project.</p>
         </article>
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
@@ -3503,8 +3512,32 @@
               <div class="role">Co-founder</div>
             </div>
           </div>
-          <h4 class="love-headline">&ldquo;User-centric designs that are both beautiful and functional.&rdquo;</h4>
-          <p class="love-body">I contacted Sagi when I was looking for a professional for a project in my startup, Fay. His user-centric designs were both beautiful and functional, greatly enhancing our product's success. He consistently delivered high-quality work on time.</p>
+          <h4 class="love-headline">&ldquo;Incredibly talented UX/UI designer.&rdquo;</h4>
+          <p class="love-body">His user-centric designs were both beautiful and functional, greatly enhancing our product's success. He consistently delivered high-quality work on time.</p>
+        </article>
+        <article class="love-card">
+          <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
+          <div class="love-who">
+            <div class="av"><img src="assets/lior.jpeg" alt="Lior Avisar" width="40" height="40" loading="lazy" decoding="async"></div>
+            <div>
+              <div class="name">Lior Avisar</div>
+              <div class="role">Founder</div>
+            </div>
+          </div>
+          <h4 class="love-headline">&ldquo;Transformed a basic concept into a stunning, functional product.&rdquo;</h4>
+          <p class="love-body">Sagi was absolutely instrumental, showing extraordinary dedication and performance under pressure. His work was crucial to our success and showcased exceptional design and problem-solving.</p>
+        </article>
+        <article class="love-card">
+          <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
+          <div class="love-who">
+            <div class="av"><img src="assets/raz.jpeg" alt="Raz Ronen" width="40" height="40" loading="lazy" decoding="async"></div>
+            <div>
+              <div class="name">Raz Ronen</div>
+              <div class="role">CEO</div>
+            </div>
+          </div>
+          <h4 class="love-headline">&ldquo;An exceptional professional.&rdquo;</h4>
+          <p class="love-body">Working with Sagi means you can rest easy, knowing that your requests will be met on time and exceed your expectations. His ability to tackle complex problems is truly impressive.</p>
         </article>
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
@@ -3515,8 +3548,20 @@
               <div class="role">CEO</div>
             </div>
           </div>
-          <h4 class="love-headline">&ldquo;Delivers intuitive, user-friendly designs that exceed expectations.&rdquo;</h4>
-          <p class="love-body">Sagi consistently delivers intuitive and user-friendly designs that not only meet but exceed expectations. His ability to understand user needs and translate them into seamless experiences is remarkable. A valuable asset to any project.</p>
+          <h4 class="love-headline">&ldquo;Intuitive, user-friendly designs that exceed expectations.&rdquo;</h4>
+          <p class="love-body">His ability to understand user needs and translate them into seamless experiences is remarkable. His attention to detail and creative problem-solving stand out.</p>
+        </article>
+        <article class="love-card">
+          <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
+          <div class="love-who">
+            <div class="av"><img src="assets/tal.jpeg" alt="Tal Gershenman" width="40" height="40" loading="lazy" decoding="async"></div>
+            <div>
+              <div class="name">Tal Gershenman</div>
+              <div class="role">Director of Product</div>
+            </div>
+          </div>
+          <h4 class="love-headline">&ldquo;Designs that meet the highest standards.&rdquo;</h4>
+          <p class="love-body">Sagi meticulously studies products to craft tailored solutions for every need. His professionalism is outstanding, and his work consistently delivers high-quality results.</p>
         </article>
         <article class="love-card">
           <img class="love-star" src="assets/star.svg" alt="" aria-hidden="true">
@@ -3528,7 +3573,7 @@
             </div>
           </div>
           <h4 class="love-headline">&ldquo;#1 designer by far.&rdquo;</h4>
-          <p class="love-body">#1 designer by far. Sagi is super talented and a real professional. Will keep working with Sagi on my ongoing UI/UX requirements and truly recommend working with him.</p>
+          <p class="love-body">Sagi is super talented and a real professional. I will keep working with Sagi for ongoing UI/UX needs and truly recommend him.</p>
         </article>
       
       </div>
@@ -3701,8 +3746,10 @@
       });
 
       const starPositions = ['top', 'right', 'bottom', 'left'];
-      // total children now = 3N. Real originals occupy indices [N .. 2N-1]
-      let loveIdx = N; // start at first real card
+      // total children now = 3N. Real originals occupy indices [N .. 2N-1].
+      // loveIdx is the card centered in the viewport, so the first real card
+      // (Daphna) is the featured card on initial reveal.
+      let loveIdx = N;
       let animating = false;
 
       function stepWidth() {
@@ -3726,21 +3773,27 @@
       }
 
       function applyStarsAndActive() {
-        const vc = visibleCount();
-        const centerOffset = vc >= 3 ? 1 : 0;
         for (let i = 0; i < track.children.length; i++) {
-          track.children[i].classList.toggle('active', i === loveIdx + centerOffset);
+          track.children[i].classList.toggle('active', i === loveIdx);
           // star position derived from logical (real) index so it stays consistent per testimonial
           const logical = ((i - N) % N + N) % N;
           track.children[i].setAttribute('data-star', starPositions[logical % starPositions.length]);
         }
       }
 
+      function translateFor(idx, dragOffset = 0) {
+        const card = track.children[idx] || track.children[0];
+        const cardWidth = card ? card.offsetWidth : 0;
+        const wrapWidth = track.parentElement.clientWidth;
+        const centeredOffset = (wrapWidth - cardWidth) / 2;
+        return centeredOffset - (idx * stepWidth()) + dragOffset;
+      }
+
       function setTranslate(withTransition) {
         track.style.transition = withTransition
           ? 'transform .7s cubic-bezier(.2, .7, .2, 1)'
           : 'none';
-        track.style.transform = `translateX(${-loveIdx * stepWidth()}px)`;
+        track.style.transform = `translateX(${translateFor(loveIdx)}px)`;
       }
 
       function snapIfNeeded() {
@@ -3809,7 +3862,7 @@
                 dragging = false;
                 track.classList.remove('is-dragging');
                 track.style.transition = 'transform .7s cubic-bezier(.2, .7, .2, 1)';
-                track.style.transform = `translateX(${-loveIdx * stepWidth()}px)`;
+                track.style.transform = `translateX(${translateFor(loveIdx)}px)`;
                 return;
               }
             } else {
@@ -3818,7 +3871,7 @@
           }
           if (locked === 'x') {
             if (e.cancelable) e.preventDefault();
-            track.style.transform = `translateX(${-loveIdx * stepWidth() + dx}px)`;
+            track.style.transform = `translateX(${translateFor(loveIdx, dx)}px)`;
           }
         }
         function onUp() {
@@ -3832,12 +3885,12 @@
             animating = true;
             loveIdx += dir;
             track.style.transition = 'transform .5s cubic-bezier(.2, .7, .2, 1)';
-            track.style.transform = `translateX(${-loveIdx * stepWidth()}px)`;
+            track.style.transform = `translateX(${translateFor(loveIdx)}px)`;
             applyStarsAndActive();
           } else {
             // Snap back
             track.style.transition = 'transform .45s cubic-bezier(.2, .7, .2, 1)';
-            track.style.transform = `translateX(${-loveIdx * stepWidth()}px)`;
+            track.style.transform = `translateX(${translateFor(loveIdx)}px)`;
           }
           locked = false;
           pointerId = null;
@@ -3865,8 +3918,7 @@
         // Tag the 3 initially-visible cards so the fan entrance animation
         // targets them (not offscreen clones). Runs once, then the
         // animationend cleanup hands control back to normal carousel styles.
-        const vc = visibleCount();
-        const centerIdx = loveIdx + (vc >= 3 ? 1 : 0);
+        const centerIdx = loveIdx;
         const cCenter = track.children[centerIdx];
         const cLeft   = track.children[centerIdx - 1];
         const cRight  = track.children[centerIdx + 1];
